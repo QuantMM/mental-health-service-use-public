@@ -153,6 +153,32 @@ legend(
 # the 1-SE rule selected the same parsimonious tree with two terminal nodes.
 
 ##############################
+## Export Supplementary Figure 1
+##############################
+# 1-column 600 DPI.
+tiff("Supplementary_Figure1_CV_Tree.tiff",
+     width = 83, height = 83, units = "mm",
+     res = 600, compression = "lzw",
+     pointsize = 9)   # 8pt 이상 확보
+
+plotcp(fit0)
+abline(v = row_1se, col = "lightblue", lty = 2)
+abline(h = xerr_min + xerr_se, col = "red", lty = 3)
+legend(
+  "topright",
+  legend = c(
+    paste0("Selected CP = ", signif(cp_1se, 4), " by 1-SE rule"),
+    paste0("1-SE cutoff = ", round(xerr_min + xerr_se, 3))
+  ),
+  col = c("lightblue", "red"),
+  lty = c(2, 3),
+  bty = "n",
+  cex = 0.85
+)
+
+dev.off()
+
+##############################
 ## 7) Extract readable decision rules
 ##############################
 print(fit_final)
