@@ -42,3 +42,47 @@ sum(is.na(d))
 dat <- na.omit(d)
 c(before = nrow(d), after = nrow(dat))
 lapply(dat[sapply(dat, is.factor)], contrasts)
+
+# Figure 1 for manuscript
+library(ggplot2)
+library(scales)
+
+# add service factor
+dat$service_plot <- factor(
+  dat$amhsu_p5,
+  levels = c("No", "Yes"),
+  labels = c("No Service Use", "Yes Service Use")
+)
+
+p <- ggplot(dat, aes(x = need_plot, fill = service_plot)) +
+  geom_bar(position = "fill", width = 0.9) +
+  scale_y_continuous(labels = percent_format(), expand = c(0, 0)) +
+  scale_fill_manual(
+    values = c("No Service Use"  = "#D2691E",
+               "Yes Service Use" = "#009371"),
+    name = "Service Use (Past 5 Years)"
+  ) +
+  labs(
+    title    = "Past 5-Year Mental Health Service Use by Perceived Need",
+    subtitle = paste0("Proportion of service users within each perceived need category (N=",
+                      nrow(dat), ")"),
+    x = "Perceived Need for Mental Health Help",
+    y = "Proportion"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    legend.position    = "top",
+    legend.title       = element_text(size = 11),
+    plot.title         = element_text(face = "bold", hjust = 0),
+    axis.text.x        = element_text(angle = 20, hjust = 1),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor   = element_blank()
+  )
+
+p
+
+tiff("Figure1_MHSU_by_Perceived_Need.tiff",
+     width = 170, height = 186, units = "mm",
+     res = 300, compression = "lzw")
+print(p)
+dev.off()
