@@ -63,6 +63,15 @@ plot(tree_B)  # basic plot
 # the additional CV tuning below is shown for dat_B, where the initial tree was more complex.
 
 
+# Figure 2 for manuscript:
+tiff("Figure2_ctree.tiff",
+     width = 70, height = 110, units = "mm",  
+     res = 300, compression = "lzw",
+     pointsize = 9)
+plot(tree_A, gp = gpar(fontsize = 9))
+dev.off()
+
+
 library(partykit)
 
 # --- formula ---
@@ -228,3 +237,21 @@ tree_final <- ctree(form, data = dat_B, control = ctrl_final)
 # --- Output final model ---
 print(tree_final)
 plot(tree_final)
+
+# Figure 3 for manuscript
+
+tiff("Figure3_ctree_final.tiff",
+     width = 170, height = 155, units = "mm",
+     res = 300, compression = "lzw",
+     pointsize = 8)
+
+plot(tree_final,
+     gp = gpar(fontsize = 8),
+     tp_args = list(
+       id      = TRUE,
+       ylines  = 2.5,     # 1.5 → 2.5 (축 라벨 공간 확보)
+       mainlab = function(id, nobs)
+         paste0("Node ", id, " (n = ", nobs, ")")
+     ))
+
+dev.off()
